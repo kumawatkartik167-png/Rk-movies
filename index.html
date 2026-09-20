@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>RK Movies | 3D Movie Zone</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+  <a href="#home" class="brand">
+    <span class="logo">RK</span>
+    <span>RK MOVIES</span>
+  </a>
+
+  <nav id="nav">
+    <a href="#home">Home</a>
+    <a href="#movies">Movies</a>
+    <a href="#player">Player</a>
+    <a href="#about">About</a>
+  </nav>
+
+  <button id="menuBtn" class="menu-btn">☰</button>
+
+</header>
+
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+  <div class="hero-content">
+
+    <p class="eyebrow">3D • HD • CINEMATIC</p>
+
+    <h1>
+      Your Next
+      <span>Adventure</span>
+      Starts Here.
+    </h1>
+
+    <p class="hero-description">
+      Welcome to RK Movies — a modern movie platform
+      with cinematic design, HD playback and 3D effects.
+    </p>
+
+    <div class="hero-buttons">
+
+      <a href="#player" class="btn primary">
+        ▶ Watch Demo
+      </a>
+
+      <a href="#movies" class="btn">
+        Explore Movies
+      </a>
+
+    </div>
+
+    <div class="stats">
+
+      <div>
+        <strong>HD</strong>
+        <small>Playback</small>
+      </div>
+
+      <div>
+        <strong>3D</strong>
+        <small>Animation</small>
+      </div>
+
+      <div>
+        <strong>100%</strong>
+        <small>Responsive</small>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 3D VISUAL -->
+
+  <div class="movie-stage">
+
+    <div class="poster poster-back">
+      SPACE
+    </div>
+
+    <div class="poster poster-middle">
+      THE<br>
+      ADVENTURE
+    </div>
+
+    <div class="poster poster-front">
+
+      <small>RK ORIGINAL</small>
+
+      <strong>
+        THE<br>
+        LAST<br>
+        JOURNEY
+      </strong>
+
+      <em>4K • ACTION</em>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MOVIES -->
+
+<section class="section" id="movies">
+
+  <div class="section-heading">
+
+    <div>
+      <p class="eyebrow">DISCOVER</p>
+      <h2>Featured Movies</h2>
+    </div>
+
+    <input
+      type="search"
+      id="search"
+      placeholder="Search movies..."
+    >
+
+  </div>
+
+
+  <div class="chips">
+
+    <button class="chip active" data-filter="all">
+      All
+    </button>
+
+    <button class="chip" data-filter="action">
+      Action
+    </button>
+
+    <button class="chip" data-filter="animation">
+      Animation
+    </button>
+
+    <button class="chip" data-filter="comedy">
+      Comedy
+    </button>
+
+    <button class="chip" data-filter="sci-fi">
+      Sci-Fi
+    </button>
+
+  </div>
+
+
+  <div class="movie-grid" id="movieGrid">
+
+
+    <article
+      class="movie-card"
+      data-title="Neon City"
+      data-category="action"
+    >
+
+      <div class="movie-cover neon">
+        <span>NEON<br>CITY</span>
+        <b>HD</b>
+      </div>
+
+      <div class="movie-info">
+
+        <h3>Neon City</h3>
+
+        <p>Action • 2h 04m</p>
+
+        <button class="watch-btn">
+          ▶ Watch
+        </button>
+
+      </div>
+
+    </article>
+
+
+    <article
+      class="movie-card"
+      data-title="Galaxy Run"
+      data-category="sci-fi"
+    >
+
+      <div class="movie-cover galaxy">
+        <span>GALAXY<br>RUN</span>
+        <b>HD</b>
+      </div>
+
+      <div class="movie-info">
+
+        <h3>Galaxy Run</h3>
+
+        <p>Sci-Fi • 1h 48m</p>
+
+        <button class="watch-btn">
+          ▶ Watch
+        </button>
+
+      </div>
+
+    </article>
+
+
+    <article
+      class="movie-card"
+      data-title="Robot Buddy"
+      data-category="animation"
+    >
+
+      <div class="movie-cover robot">
+        <span>ROBOT<br>BUDDY</span>
+        <b>3D</b>
+      </div>
+
+      <div class="movie-info">
+
+        <h3>Robot Buddy</h3>
+
+        <p>Animation • 1h 31m</p>
+
+        <button class="watch-btn">
+          ▶ Watch
+        </button>
+
+      </div>
+
+    </article>
+
+
+    <article
+      class="movie-card"
+      data-title="Funny Trouble"
+      data-category="comedy"
+    >
+
+      <div class="movie-cover comedy">
+        <span>FUNNY<br>TROUBLE</span>
+        <b>HD</b>
+      </div>
+
+      <div class="movie-info">
+
+        <h3>Funny Trouble</h3>
+
+        <p>Comedy • 1h 39m</p>
+
+        <button class="watch-btn">
+          ▶ Watch
+        </button>
+
+      </div>
+
+    </article>
+
+  </div>
+
+
+  <p id="noResults" class="no-results">
+    No movies found.
+  </p>
+
+</section>
+
+
+<!-- VIDEO PLAYER -->
+
+<section class="section player-section" id="player">
+
+  <p class="eyebrow">HD PLAYER</p>
+
+  <h2>Watch & Control</h2>
+
+  <div class="video-container">
+
+    <video
+      id="videoPlayer"
+      controls
+      playsinline
+      preload="metadata"
+    >
+
+      <source
+        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+        type="video/mp4"
+      >
+
+      Your browser does not support video playback.
+
+    </video>
+
+  </div>
+
+  <p class="video-note">
+    Demo video only. Replace it with videos you own
+    or are licensed to stream.
+  </p>
+
+</section>
+
+
+<!-- PHASE 2 -->
+
+<section class="section" id="about">
+
+  <div class="phase-box">
+
+    <div>
+
+      <p class="eyebrow">NEXT PHASE</p>
+
+      <h2>RK Movies Platform</h2>
+
+      <p>
+        Phase 2 will add mobile upload,
+        user accounts, thumbnails, database,
+        cloud storage and admin controls.
+      </p>
+
+    </div>
+
+    <button id="phaseBtn" class="btn primary">
+      Coming Next
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  © 2026 RK Movies • Phase 1
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+      </html>
