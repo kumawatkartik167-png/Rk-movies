@@ -1,175 +1,295 @@
-const search = document.getElementById("search");
+/* =========================================
+   RK MOVIES - PHASE 2
+   Main JavaScript
+========================================= */
 
-const cards = [
-  ...document.querySelectorAll(".movie-card")
-];
+document.addEventListener("DOMContentLoaded", () => {
 
-const chips = [
-  ...document.querySelectorAll(".chip")
-];
+  /* =========================
+     MOBILE MENU
+  ========================= */
 
-const noResults =
-  document.getElementById("noResults");
+  const menuBtn = document.getElementById("menuBtn");
+  const nav = document.querySelector(".topbar nav");
 
-const menuBtn =
-  document.getElementById("menuBtn");
+  if (menuBtn && nav) {
+    menuBtn.addEventListener("click", () => {
+      nav.classList.toggle("mobile-open");
+    });
 
-const nav =
-  document.getElementById("nav");
-
-let selectedCategory = "all";
-
-
-/* SEARCH + FILTER */
-
-function filterMovies() {
-
-  const query =
-    search.value
-      .toLowerCase()
-      .trim();
-
-  let visible = 0;
-
-  cards.forEach(card => {
-
-    const title =
-      card.dataset.title.toLowerCase();
-
-    const category =
-      card.dataset.category;
-
-    const categoryMatch =
-      selectedCategory === "all" ||
-      category === selectedCategory;
-
-    const searchMatch =
-      title.includes(query);
-
-    if (categoryMatch && searchMatch) {
-
-      card.style.display = "";
-
-      visible++;
-
-    } else {
-
-      card.style.display = "none";
-
-    }
-
-  });
-
-
-  if (visible === 0) {
-
-    noResults.style.display = "block";
-
-  } else {
-
-    noResults.style.display = "none";
-
+    nav.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        nav.classList.remove("mobile-open");
+      });
+    });
   }
 
-}
+
+  /* =========================
+     MOVIE SEARCH
+  ========================= */
+
+  const searchInput = document.getElementById("search");
+  const cards = Array.from(document.querySelectorAll(".card"));
+  const chips = Array.from(document.querySelectorAll(".chip"));
+  const emptyMessage = document.getElementById("empty");
+
+  let activeFilter = "all";
+
+  function filterMovies() {
+
+    const searchText = searchInput
+      ? searchInput.value.toLowerCase().trim()
+      : "";
+
+    let visibleMovies = 0;
+
+    cards.forEach(card => {
+
+      const title =
+        (card.dataset.title || card.textContent)
+        .toLowerCase();
+
+      const category =
+        (card.dataset.cat || "all")
+        .toLowerCase();
+
+      const filterMatch =
+        activeFilter === "all" ||
+        category === activeFilter;
+
+      const searchMatch =
+        title.includes(searchText);
+
+      if (filterMatch && searchMatch) {
+        card.style.display = "";
+        visibleMovies++;
+      } else {
+        card.style.display = "none";
+      }
+
+    });
+
+    if (emptyMessage) {
+      emptyMessage.style.display =
+        visibleMovies === 0 ? "block" : "none";
+    }
+  }
 
 
-/* SEARCH */
-
-search.addEventListener(
-  "input",
-  filterMovies
-);
+  if (searchInput) {
+    searchInput.addEventListener("input", filterMovies);
+  }
 
 
-/* CATEGORY BUTTONS */
+  /* =========================
+     MOVIE CATEGORY FILTER
+  ========================= */
 
-chips.forEach(chip => {
+  chips.forEach(chip => {
 
-  chip.addEventListener(
-    "click",
-    () => {
+    chip.addEventListener("click", () => {
 
-      chips.forEach(c =>
-        c.classList.remove("active")
-      );
+      chips.forEach(item => {
+        item.classList.remove("active");
+      });
 
       chip.classList.add("active");
 
-      selectedCategory =
-        chip.dataset.filter;
+      activeFilter =
+        (chip.dataset.filter || "all").toLowerCase();
 
       filterMovies();
-
-    }
-  );
-
-});
-
-
-/* WATCH BUTTON */
-
-document
-  .querySelectorAll(".watch-btn")
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        document
-          .getElementById("player")
-          .scrollIntoView({
-            behavior: "smooth"
-          });
-
-      }
-    );
+    });
 
   });
 
 
-/* MOBILE MENU */
+  /* =========================
+     WATCH BUTTONS
+  ========================= */
 
-menuBtn.addEventListener(
-  "click",
-  () => {
+  const watchButtons =
+    document.querySelectorAll(".watch");
 
-    nav.classList.toggle("show");
+  const playerSection =
+    document.getElementById("player");
+
+  watchButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      if (playerSection) {
+
+        playerSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      }
+
+    });
+
+  });
+
+
+  /* =========================
+     VIDEO PLAYER
+  ========================= */
+
+  const video =
+    document.querySelector(".player video");
+
+  if (video) {
+
+    video.addEventListener("play", () => {
+      console.log("RK Movies video started");
+    });
+
+    video.addEventListener("pause", () => {
+      console.log("RK Movies video paused");
+    });
+
+    video.addEventListener("ended", () => {
+      console.log("RK Movies video ended");
+    });
 
   }
-);
 
 
-/* CLOSE MOBILE MENU */
+  /* =========================
+     VIDEO DOUBLE TAP / DOUBLE CLICK
+     Skip 10 seconds
+  ========================= */
 
-document
-  .querySelectorAll("nav a")
-  .forEach(link => {
+  if (video) {
 
-    link.addEventListener(
-      "click",
-      () => {
+    let lastTap = 0;
 
-        nav.classList.remove("show");
+    video.addEventListener("click", event => {
+
+      const currentTime =
+        new Date().getTime();
+
+      const tapLength =
+        currentTime - lastTap;
+
+      if (tapLength < 350 && tapLength > 0) {
+
+        const rect =
+          video.getBoundingClientRect();
+
+        const clickX =
+          event.clientX - rect.left;
+
+        if (clickX < rect.width / 2) {
+
+          video.currentTime =
+            Math.max(0, video.currentTime - 10);
+
+        } else {
+
+          video.currentTime =
+            Math.min(
+              video.duration || Infinity,
+              video.currentTime + 10
+            );
+
+        }
 
       }
-    );
 
-  });
+      lastTap = currentTime;
+
+    });
+
+  }
 
 
-/* PHASE 2 BUTTON */
+  /* =========================
+     UPLOAD UI
+  ========================= */
 
-document
-  .getElementById("phaseBtn")
-  .addEventListener(
-    "click",
-    () => {
+  const uploadInput =
+    document.getElementById("movieUpload");
 
-      alert(
-        "Phase 2 में Mobile Upload, Login, Database, Cloud Storage और Admin System आएगा."
-      );
+  const uploadButton =
+    document.getElementById("uploadBtn");
 
-    }
-  );
+  const progressBar =
+    document.querySelector(".progress span");
+
+  const uploadStatus =
+    document.getElementById("uploadStatus");
+
+  if (uploadButton && uploadInput) {
+
+    uploadButton.addEventListener("click", () => {
+
+      if (!uploadInput.files.length) {
+
+        if (uploadStatus) {
+          uploadStatus.textContent =
+            "Please select a video first.";
+        }
+
+        return;
+      }
+
+      const file =
+        uploadInput.files[0];
+
+      const allowedTypes = [
+        "video/mp4",
+        "video/webm",
+        "video/ogg",
+        "video/quicktime"
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+
+        if (uploadStatus) {
+          uploadStatus.textContent =
+            "Please select a supported video file.";
+        }
+
+        return;
+      }
+
+      if (uploadStatus) {
+        uploadStatus.textContent =
+          "Video selected: " + file.name;
+      }
+
+      /*
+        Phase 2 frontend demo only.
+
+        Real upload requires:
+        - Backend
+        - Cloud storage
+        - Database
+        - Authentication
+        - Upload API
+      */
+
+      let progress = 0;
+
+      if (progressBar) {
+        progressBar.style.width = "0%";
+      }
+
+      const timer =
+        setInterval(() => {
+
+          progress += 10;
+
+          if (progressBar) {
+            progressBar.style.width =
+              progress + "%";
+          }
+
+          if (progress >= 100) {
+
+            clearInterval(timer);
+
+            if (
