@@ -1,7 +1,11 @@
 /* =========================================================
-   RK MOVIES - PHASE 2
+   RK MOVIES — PHASE 2
    FINAL RESPONSIVE CINEMATIC CSS
-   Mobile + Tablet + Desktop
+   ========================================================= */
+
+
+/* =========================================================
+   ROOT
    ========================================================= */
 
 :root {
@@ -15,18 +19,22 @@
 
   --primary: #7c5cff;
   --secondary: #19d3ff;
+
   --success: #36e39a;
   --danger: #ff5c7a;
 
   --border: rgba(255, 255, 255, 0.12);
-  --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 
-  --radius: 20px;
+  --shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35);
+
+  --radius: 22px;
 }
 
-/* =========================
+
+/* =========================================================
    RESET
-   ========================= */
+   ========================================================= */
 
 * {
   box-sizing: border-box;
@@ -40,13 +48,10 @@ html {
 
 body {
   min-height: 100vh;
-  overflow-x: hidden;
-
-  color: var(--text);
   background:
     radial-gradient(
-      circle at 15% 10%,
-      rgba(124, 92, 255, 0.18),
+      circle at 15% 15%,
+      rgba(124, 92, 255, 0.16),
       transparent 32%
     ),
     radial-gradient(
@@ -54,28 +59,36 @@ body {
       rgba(25, 211, 255, 0.12),
       transparent 30%
     ),
-    linear-gradient(180deg, #070816 0%, #060712 100%);
+    linear-gradient(
+      135deg,
+      var(--bg),
+      var(--bg2)
+    );
+
+  color: var(--text);
 
   font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
+    Arial,
+    Helvetica,
     sans-serif;
 
-  line-height: 1.5;
+  line-height: 1.6;
+
+  overflow-x: hidden;
 }
 
-body,
+img,
+video {
+  max-width: 100%;
+}
+
 button,
 input {
-  font-family: inherit;
+  font: inherit;
 }
 
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
+button {
+  cursor: pointer;
 }
 
 a {
@@ -83,58 +96,82 @@ a {
   text-decoration: none;
 }
 
-button {
-  border: 0;
-  cursor: pointer;
+
+/* =========================================================
+   COMMON
+   ========================================================= */
+
+main {
+  width: 100%;
 }
 
-img,
-video {
-  display: block;
-  max-width: 100%;
+.section {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 90px 0;
 }
 
-/* =========================
-   SCROLLBAR
-   ========================= */
+.eyebrow {
+  margin-bottom: 12px;
 
-::-webkit-scrollbar {
-  width: 8px;
+  color: var(--secondary);
+
+  font-size: 14px;
+  font-weight: 800;
+
+  letter-spacing: 5px;
+
+  text-transform: uppercase;
 }
 
-::-webkit-scrollbar-track {
-  background: #070912;
+h1,
+h2,
+h3 {
+  line-height: 1.15;
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    var(--primary),
-    var(--secondary)
+h2 {
+  margin-bottom: 25px;
+
+  font-size: clamp(
+    32px,
+    5vw,
+    52px
   );
-  border-radius: 20px;
+
+  font-weight: 800;
 }
 
-/* =========================
-   TOP NAVBAR
-   ========================= */
+p {
+  color: var(--muted);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .topbar {
   position: sticky;
   top: 0;
+
   z-index: 1000;
 
   width: 100%;
-  min-height: 76px;
+
+  min-height: 82px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
 
-  padding: 12px 5%;
+  padding: 12px 28px;
 
-  background: rgba(5, 7, 18, 0.86);
-  border-bottom: 1px solid var(--border);
+  background:
+    rgba(5, 7, 18, 0.92);
+
+  border-bottom:
+    1px solid var(--border);
 
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -143,26 +180,20 @@ video {
 .brand {
   display: flex;
   align-items: center;
+
   gap: 14px;
 
   flex-shrink: 0;
-
-  font-size: 18px;
-  font-weight: 800;
 }
 
 .logo {
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 62px;
 
   display: grid;
   place-items: center;
 
   border-radius: 18px;
-
-  color: white;
-  font-size: 20px;
-  font-weight: 900;
 
   background:
     linear-gradient(
@@ -171,47 +202,49 @@ video {
       var(--secondary)
     );
 
+  color: white;
+
+  font-size: 22px;
+  font-weight: 900;
+
   box-shadow:
-    0 10px 30px rgba(124, 92, 255, 0.35);
+    0 0 30px
+    rgba(124, 92, 255, 0.35);
+}
+
+.brand b {
+  font-size: 19px;
+  letter-spacing: 0.5px;
 }
 
 .topbar nav {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 30px;
 
-  margin-left: auto;
+  gap: 34px;
 }
 
 .topbar nav a {
   position: relative;
 
-  color: var(--muted);
-  font-size: 16px;
+  color: #c9ccda;
+
   font-weight: 600;
 
   transition:
-    color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.topbar nav a:hover {
-  color: white;
-  transform: translateY(-1px);
+    color 0.25s ease;
 }
 
 .topbar nav a::after {
   content: "";
 
   position: absolute;
+
   left: 0;
-  bottom: -7px;
+  bottom: -8px;
 
   width: 0;
   height: 2px;
-
-  border-radius: 10px;
 
   background:
     linear-gradient(
@@ -220,58 +253,54 @@ video {
       var(--secondary)
     );
 
-  transition: width 0.25s ease;
+  transition:
+    width 0.25s ease;
+}
+
+.topbar nav a:hover {
+  color: white;
 }
 
 .topbar nav a:hover::after {
   width: 100%;
 }
 
-/* =========================
-   LOGIN
-   ========================= */
 
-.login-btn,
-.topbar .login,
-button.login {
-  min-height: 44px;
+/* Login */
+
+#loginBtn,
+.login-btn {
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
 
   padding: 10px 18px;
 
-  border: 1px solid var(--border);
-  border-radius: 12px;
-
   color: white;
-  background: rgba(255, 255, 255, 0.05);
 
-  font-size: 15px;
-  font-weight: 700;
+  background:
+    rgba(255, 255, 255, 0.06);
 
   transition:
-    transform 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease;
+    0.25s ease;
 }
 
-.login-btn:hover,
-.topbar .login:hover,
-button.login:hover {
-  transform: translateY(-2px);
-
-  border-color: rgba(25, 211, 255, 0.5);
-
+#loginBtn:hover,
+.login-btn:hover {
   background:
     linear-gradient(
       135deg,
-      rgba(124, 92, 255, 0.35),
-      rgba(25, 211, 255, 0.2)
+      var(--primary),
+      var(--secondary)
     );
+
+  border-color: transparent;
 }
 
-/* =========================
-   MOBILE MENU BUTTON
-   ========================= */
 
+/* Menu */
+
+#menuBtn,
 .menu {
   display: none;
 
@@ -279,69 +308,64 @@ button.login:hover {
   height: 44px;
 
   border: 1px solid var(--border);
+
   border-radius: 12px;
 
   color: white;
-  background: rgba(255, 255, 255, 0.06);
+
+  background:
+    rgba(255, 255, 255, 0.06);
 
   font-size: 22px;
 }
 
-/* =========================
-   MAIN
-   ========================= */
 
-main {
-  width: 100%;
-  overflow: hidden;
-}
-
-/* =========================
+/* =========================================================
    HERO
-   ========================= */
+   ========================================================= */
 
 .hero {
-  width: min(1200px, 90%);
+  width: min(1180px, calc(100% - 40px));
 
-  min-height: 720px;
+  min-height: 700px;
 
   margin: 0 auto;
 
   padding:
-    90px 0
-    80px;
+    80px 0 70px;
 
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(360px, 0.85fr);
+
+  gap: 55px;
+
   align-items: center;
-  gap: 70px;
 }
 
 .heroText {
   position: relative;
-  z-index: 3;
-}
 
-.eyebrow {
-  margin-bottom: 16px;
-
-  color: var(--secondary);
-
-  font-size: 13px;
-  font-weight: 900;
-
-  letter-spacing: 6px;
-  text-transform: uppercase;
+  z-index: 5;
 }
 
 .hero h1 {
-  max-width: 700px;
+  max-width: 760px;
 
   margin-bottom: 22px;
 
-  font-size: clamp(42px, 6vw, 76px);
-  line-height: 0.98;
-  letter-spacing: -3px;
+  font-size:
+    clamp(
+      44px,
+      6vw,
+      76px
+    );
+
+  font-weight: 900;
+
+  letter-spacing: -2px;
 }
 
 .hero h1 span {
@@ -358,59 +382,62 @@ main {
   color: transparent;
 }
 
-.sub {
-  max-width: 650px;
+.hero .sub {
+  max-width: 680px;
 
   margin-bottom: 30px;
 
-  color: var(--muted);
-
   font-size: 18px;
-  line-height: 1.7;
 }
 
-/* =========================
-   BUTTONS
-   ========================= */
+
+/* Buttons */
 
 .actions {
   display: flex;
   flex-wrap: wrap;
+
   gap: 14px;
+
+  margin-bottom: 40px;
 }
 
 .btn {
-  min-height: 52px;
-
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
-  padding: 13px 24px;
+  min-height: 56px;
 
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  padding:
+    0 25px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 17px;
 
   color: white;
-  background: rgba(255, 255, 255, 0.05);
 
-  font-size: 16px;
+  background:
+    rgba(255, 255, 255, 0.05);
+
   font-weight: 800;
 
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
-    border-color 0.25s ease;
+    background 0.25s ease;
 }
 
 .btn:hover {
-  transform: translateY(-3px);
-
-  border-color: rgba(25, 211, 255, 0.45);
+  transform:
+    translateY(-3px);
 }
 
 .btn.primary {
-  border-color: transparent;
+  border: 0;
 
   background:
     linear-gradient(
@@ -420,270 +447,327 @@ main {
     );
 
   box-shadow:
-    0 12px 30px rgba(124, 92, 255, 0.28);
+    0 15px 40px
+    rgba(124, 92, 255, 0.28);
 }
 
-.btn.primary:hover {
-  box-shadow:
-    0 18px 40px rgba(25, 211, 255, 0.22);
-}
 
-/* =========================
-   STATS
-   ========================= */
+/* Stats */
 
 .stats {
   display: flex;
-  gap: 45px;
 
-  margin-top: 45px;
+  flex-wrap: wrap;
+
+  gap: 45px;
 }
 
 .stats div {
   display: flex;
+
   flex-direction: column;
-  gap: 3px;
 }
 
 .stats b {
-  font-size: 24px;
+  font-size: 23px;
 }
 
 .stats small {
   color: var(--muted);
-  font-size: 13px;
+
+  font-size: 14px;
 }
 
-/* =========================
-   3D HERO VISUAL
-   ========================= */
+
+/* =========================================================
+   HERO 3D VISUAL
+   IMPORTANT: FIXED HEIGHT PREVENTS OVERLAP
+   ========================================================= */
 
 .visual {
   position: relative;
 
   width: 100%;
-  min-height: 560px;
 
-  display: grid;
-  place-items: center;
+  height: 560px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 
   perspective: 1200px;
+
+  isolation: isolate;
 }
+
+.visual::before {
+  content: "";
+
+  position: absolute;
+
+  width: 330px;
+  height: 330px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(124, 92, 255, 0.35),
+      transparent 68%
+    );
+
+  filter: blur(15px);
+
+  z-index: -1;
+}
+
+
+/* Posters */
 
 .poster {
   position: absolute;
 
-  width: 250px;
-  height: 370px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 230px;
+  height: 350px;
 
   padding: 25px;
 
-  overflow: hidden;
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.2);
 
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 25px;
+  border-radius: 26px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
 
   color: white;
 
-  text-align: center;
-  font-weight: 900;
+  overflow: hidden;
 
   box-shadow:
-    0 35px 80px rgba(0, 0, 0, 0.5);
+    0 30px 80px
+    rgba(0, 0, 0, 0.45);
 
-  background:
-    linear-gradient(
-      145deg,
-      #252947,
-      #080a18
-    );
+  transition:
+    transform 0.4s ease;
 }
 
 .poster::before {
   content: "";
 
   position: absolute;
+
   inset: 0;
 
   background:
     linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0.2),
-      transparent 35%,
-      transparent 70%,
-      rgba(25, 211, 255, 0.12)
+      135deg,
+      rgba(255, 255, 255, 0.12),
+      transparent 50%
     );
 
   pointer-events: none;
 }
 
+.poster small,
+.poster strong,
+.poster em {
+  position: relative;
+
+  z-index: 2;
+}
+
+.poster strong {
+  font-size: 27px;
+
+  line-height: 1.05;
+
+  letter-spacing: 1px;
+}
+
+.poster em {
+  font-size: 11px;
+
+  font-style: normal;
+
+  opacity: 0.8;
+}
+
 .poster.back {
   transform:
-    translateX(-115px)
-    translateY(20px)
-    rotateY(25deg)
-    rotateZ(-7deg);
+    translateX(-105px)
+    rotateY(28deg)
+    rotateZ(-8deg)
+    scale(0.88);
 
-  opacity: 0.7;
+  opacity: 0.55;
+
+  background:
+    linear-gradient(
+      145deg,
+      #111c49,
+      #25113d
+    );
 }
 
 .poster.mid {
   transform:
-    translateX(90px)
-    translateY(15px)
-    rotateY(-24deg)
-    rotateZ(7deg);
+    translateX(65px)
+    rotateY(-25deg)
+    rotateZ(7deg)
+    scale(0.9);
 
-  opacity: 0.78;
+  opacity: 0.7;
+
+  background:
+    linear-gradient(
+      145deg,
+      #122b42,
+      #16132f
+    );
 }
 
 .poster.front {
-  z-index: 3;
-
-  flex-direction: column;
-  gap: 22px;
-
   transform:
-    translateZ(60px)
-    rotateY(0deg);
+    translateZ(80px);
+
+  z-index: 5;
+
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(25, 211, 255, 0.22),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #191b3a,
+      #090b17
+    );
 }
 
-.poster.front small {
-  font-size: 11px;
-  letter-spacing: 3px;
-  opacity: 0.75;
+.visual:hover .poster.front {
+  transform:
+    translateZ(100px)
+    rotateY(-4deg)
+    rotateX(2deg);
 }
 
-.poster.front strong {
-  font-size: 28px;
-  line-height: 1.05;
+
+/* =========================================================
+   MOVIES SECTION
+   ========================================================= */
+
+#movies {
+  position: relative;
+
+  clear: both;
 }
-
-.poster.front em {
-  font-size: 11px;
-  font-style: normal;
-  letter-spacing: 3px;
-  color: var(--secondary);
-}
-
-/* =========================
-   SECTIONS
-   ========================= */
-
-.section {
-  width: min(1200px, 90%);
-
-  margin: 0 auto;
-
-  padding: 80px 0;
-}
-
-.section h2 {
-  margin-bottom: 30px;
-
-  font-size: clamp(32px, 5vw, 52px);
-  line-height: 1.05;
-  letter-spacing: -1.5px;
-}
-
-/* =========================
-   SECTION HEADING
-   ========================= */
 
 .heading {
   display: flex;
+
   align-items: flex-end;
   justify-content: space-between;
-  gap: 30px;
 
-  margin-bottom: 30px;
+  gap: 25px;
+
+  margin-bottom: 28px;
 }
 
 .heading h2 {
   margin-bottom: 0;
 }
 
-/* =========================
-   SEARCH
-   ========================= */
+
+/* Search */
 
 #search,
-.search-input {
-  width: min(360px, 100%);
-  min-height: 50px;
+#movieSearch,
+#searchInput {
+  width: min(350px, 100%);
 
-  padding: 12px 16px;
+  height: 50px;
 
-  border: 1px solid var(--border);
+  padding:
+    0 17px;
+
+  border:
+    1px solid var(--border);
+
   border-radius: 14px;
 
   outline: none;
 
   color: white;
-  background: rgba(255, 255, 255, 0.06);
 
-  font-size: 15px;
-
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
+  background:
+    rgba(255, 255, 255, 0.06);
 }
 
 #search::placeholder,
-.search-input::placeholder {
-  color: #8f96ad;
+#movieSearch::placeholder,
+#searchInput::placeholder {
+  color: #8f95aa;
 }
 
 #search:focus,
-.search-input:focus {
-  border-color: var(--secondary);
+#movieSearch:focus,
+#searchInput:focus {
+  border-color:
+    var(--secondary);
 
   box-shadow:
-    0 0 0 4px rgba(25, 211, 255, 0.08);
+    0 0 0 3px
+    rgba(25, 211, 255, 0.1);
 }
 
-/* =========================
-   FILTER CHIPS
-   ========================= */
+
+/* Filter buttons */
 
 .chips {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 10px;
 
   margin-bottom: 30px;
 }
 
-.chip {
-  min-height: 40px;
+.chip,
+.filter-btn {
+  border:
+    1px solid var(--border);
 
-  padding: 9px 16px;
-
-  border: 1px solid var(--border);
   border-radius: 999px;
 
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.04);
+  padding:
+    9px 17px;
 
-  font-weight: 700;
+  color: #c8ccda;
+
+  background:
+    rgba(255, 255, 255, 0.04);
 
   transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    transform 0.25s ease;
+    0.25s ease;
 }
 
-.chip:hover {
+.chip:hover,
+.chip.active,
+.filter-btn:hover,
+.filter-btn.active {
   color: white;
-  transform: translateY(-2px);
-}
 
-.chip.active {
-  color: white;
+  border-color:
+    transparent;
 
   background:
     linear-gradient(
@@ -691,13 +775,12 @@ main {
       var(--primary),
       var(--secondary)
     );
-
-  border-color: transparent;
 }
 
-/* =========================
+
+/* =========================================================
    MOVIE GRID
-   ========================= */
+   ========================================================= */
 
 .grid {
   display: grid;
@@ -708,78 +791,73 @@ main {
   gap: 22px;
 }
 
-.card {
+.card,
+.movie-card {
   position: relative;
 
   min-width: 0;
 
   padding: 14px;
 
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border:
+    1px solid var(--border);
+
+  border-radius: 20px;
 
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.05),
-      rgba(255, 255, 255, 0.025)
+      rgba(255,255,255,0.06),
+      rgba(255,255,255,0.025)
     );
 
-  box-shadow: var(--shadow);
+  box-shadow:
+    var(--shadow);
+
+  overflow: hidden;
 
   transition:
     transform 0.3s ease,
     border-color 0.3s ease;
 }
 
-.card:hover {
-  transform: translateY(-8px);
+.card:hover,
+.movie-card:hover {
+  transform:
+    translateY(-8px);
 
   border-color:
     rgba(25, 211, 255, 0.35);
 }
 
+
+/* Movie covers */
+
 .cover {
-  height: 260px;
+  position: relative;
+
+  width: 100%;
+
+  height: 270px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
-  position: relative;
+  border-radius: 15px;
 
   overflow: hidden;
-
-  border-radius: 14px;
 
   color: white;
 
   text-align: center;
 
-  font-size: 25px;
+  font-size: 27px;
+
   font-weight: 900;
+
   line-height: 1.05;
-
-  background:
-    linear-gradient(
-      145deg,
-      #272b52,
-      #101223
-    );
-}
-
-.cover::after {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255,255,255,0.16),
-      transparent 40%
-    );
 }
 
 .cover i {
@@ -788,83 +866,103 @@ main {
   right: 10px;
   bottom: 10px;
 
-  z-index: 2;
-
-  padding: 4px 8px;
+  padding:
+    4px 8px;
 
   border-radius: 7px;
 
-  color: white;
-  background: rgba(0,0,0,0.55);
+  background:
+    rgba(0,0,0,0.5);
 
   font-size: 10px;
+
   font-style: normal;
 }
 
 .cover.neon {
   background:
+    radial-gradient(
+      circle at 20% 20%,
+      #ff3cac,
+      transparent 35%
+    ),
     linear-gradient(
       135deg,
-      #261d68,
-      #111b45,
-      #06151e
+      #07152e,
+      #261044
     );
 }
 
 .cover.galaxy {
   background:
     radial-gradient(
-      circle at 30% 30%,
-      #6b42ff,
-      transparent 25%
+      circle,
+      #32d8ff,
+      transparent 20%
     ),
     linear-gradient(
-      145deg,
-      #131858,
-      #050715
+      135deg,
+      #071328,
+      #31104b
     );
 }
 
 .cover.robot {
   background:
+    radial-gradient(
+      circle at 50% 25%,
+      #67f0ff,
+      transparent 25%
+    ),
     linear-gradient(
-      145deg,
-      #174a63,
-      #101529
+      135deg,
+      #17344a,
+      #10142c
     );
 }
 
 .cover.comedy {
   background:
+    radial-gradient(
+      circle at 30% 20%,
+      #ffd36a,
+      transparent 25%
+    ),
     linear-gradient(
-      145deg,
-      #5d285a,
-      #151226
+      135deg,
+      #401d2c,
+      #17142e
     );
 }
 
-.card h3 {
-  margin-top: 16px;
+.card h3,
+.movie-card h3 {
+  margin:
+    16px 4px 5px;
 
   font-size: 19px;
 }
 
-.card p {
-  margin-top: 5px;
-
-  color: var(--muted);
+.card p,
+.movie-card p {
+  margin:
+    0 4px 13px;
 
   font-size: 14px;
 }
 
-.watch {
+
+/* Watch button */
+
+.watch,
+.watch-btn {
   width: 100%;
 
-  min-height: 42px;
+  min-height: 44px;
 
-  margin-top: 15px;
+  border: 0;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
   color: white;
 
@@ -876,144 +974,237 @@ main {
     );
 
   font-weight: 800;
+
+  transition:
+    transform 0.2s ease;
 }
 
-/* =========================
-   EMPTY SEARCH
-   ========================= */
+.watch:hover,
+.watch-btn:hover {
+  transform:
+    translateY(-2px);
+}
+
+
+/* Favorite button */
+
+.favorite,
+.fav-btn,
+[data-favorite] {
+  position: absolute;
+
+  top: 24px;
+  right: 24px;
+
+  z-index: 5;
+
+  width: 40px;
+  height: 40px;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid rgba(255,255,255,0.15);
+
+  border-radius: 50%;
+
+  color: white;
+
+  background:
+    rgba(0,0,0,0.5);
+
+  backdrop-filter: blur(8px);
+}
+
+.favorite.active,
+.fav-btn.active,
+[data-favorite].active {
+  color: #ff5c7a;
+
+  border-color:
+    rgba(255,92,122,0.4);
+}
+
+
+/* Empty */
 
 .empty {
   display: none;
 
-  padding: 30px 0;
-
-  color: var(--muted);
+  padding: 40px;
 
   text-align: center;
-}
-
-/* =========================
-   FAVORITES
-   ========================= */
-
-#library,
-.library,
-.favorites {
-  min-height: 0 !important;
-
-  padding-top: 55px !important;
-  padding-bottom: 55px !important;
-}
-
-#library h2,
-.library h2,
-.favorites h2 {
-  margin-bottom: 20px;
-}
-
-.favorite-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
-  gap: 20px;
-}
-
-/* Empty favorite area */
-.favorite-empty {
-  min-height: 120px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 25px;
-
-  border: 1px dashed var(--border);
-  border-radius: 18px;
 
   color: var(--muted);
-
-  background: rgba(255,255,255,0.025);
 }
 
-/* =========================
+
+/* =========================================================
+   MY FAVORITES
+   ========================================================= */
+
+#library,
+#favorites,
+.library-section {
+  min-height: 280px;
+}
+
+#library .grid,
+#favorites .grid {
+  min-height: 100px;
+}
+
+
+/* =========================================================
    VIDEO PLAYER
-   ========================= */
+   ========================================================= */
 
 #player {
-  padding-top: 65px;
-  padding-bottom: 65px;
+  clear: both;
 }
 
 .player {
   width: 100%;
 
-  margin-top: 15px;
+  margin-top: 20px;
 
-  overflow: hidden;
+  padding: 12px;
 
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  border:
+    1px solid var(--border);
 
-  background: #000;
+  border-radius: 22px;
+
+  background:
+    rgba(255,255,255,0.04);
 
   box-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.4);
+    var(--shadow);
 }
 
-.player video {
+.player video,
+#videoPlayer {
+  display: block;
+
   width: 100%;
 
-  aspect-ratio: 16 / 9;
+  min-height: 300px;
 
-  min-height: 260px;
+  max-height: 650px;
 
-  object-fit: contain;
+  border-radius: 14px;
 
   background: #000;
+
+  object-fit: contain;
 }
 
+.player-message,
+#playerMessage,
 .note {
-  margin-top: 14px;
+  margin-top: 12px;
 
   color: var(--muted);
 
   font-size: 14px;
 }
 
-/* =========================
-   PHASE 2 PLATFORM CARD
-   ========================= */
+
+/* =========================================================
+   UPLOAD SECTION
+   ========================================================= */
+
+#upload,
+.upload-section {
+  position: relative;
+
+  clear: both;
+}
+
+.upload-box {
+  padding: 35px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124,92,255,0.1),
+      rgba(25,211,255,0.08)
+    );
+}
+
+.upload-box input[type="file"] {
+  width: 100%;
+
+  padding: 16px;
+
+  border:
+    1px dashed
+    rgba(255,255,255,0.25);
+
+  border-radius: 14px;
+
+  color: var(--muted);
+
+  background:
+    rgba(255,255,255,0.03);
+}
+
+.upload-preview,
+#uploadPreview,
+#videoPreview {
+  display: none;
+
+  margin-top: 20px;
+}
+
+.upload-preview video,
+#uploadPreview video,
+#videoPreview video {
+  width: 100%;
+
+  max-height: 450px;
+
+  border-radius: 16px;
+
+  background: #000;
+}
+
+
+/* =========================================================
+   PHASE 2 CALL OUT
+   ========================================================= */
 
 .next {
-  min-height: 230px;
-
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 
   gap: 30px;
 
-  padding: 45px;
+  padding:
+    45px;
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--border);
+
   border-radius: 28px;
 
   background:
-    radial-gradient(
-      circle at 100% 50%,
-      rgba(25, 211, 255, 0.13),
-      transparent 35%
-    ),
     linear-gradient(
       135deg,
-      rgba(124, 92, 255, 0.10),
-      rgba(255,255,255,0.03)
+      rgba(124,92,255,0.12),
+      rgba(25,211,255,0.09)
     );
 
-  box-shadow: var(--shadow);
+  box-shadow:
+    var(--shadow);
 }
 
 .next h2 {
@@ -1022,53 +1213,15 @@ main {
 
 .next p {
   max-width: 700px;
-
-  color: var(--muted);
 }
 
-/* =========================
-   UPLOAD AREA
-   ========================= */
 
-.upload-box {
-  width: 100%;
+/* =========================================================
+   LOGIN MODAL
+   ========================================================= */
 
-  padding: 35px;
-
-  border: 1px dashed rgba(25, 211, 255, 0.4);
-  border-radius: 20px;
-
-  text-align: center;
-
-  background:
-    rgba(25, 211, 255, 0.04);
-}
-
-.upload-box input[type="file"] {
-  width: 100%;
-
-  margin-top: 20px;
-
-  color: var(--muted);
-}
-
-.upload-preview {
-  display: none;
-
-  width: 100%;
-
-  margin-top: 20px;
-
-  border-radius: 15px;
-}
-
-/* =========================
-   LOGIN / MODAL
-   ========================= */
-
-.modal,
 .login-modal,
-.upload-modal {
+#loginModal {
   position: fixed;
 
   inset: 0;
@@ -1076,77 +1229,84 @@ main {
   z-index: 2000;
 
   display: none;
+
   align-items: center;
   justify-content: center;
 
   padding: 20px;
 
-  background: rgba(0, 0, 0, 0.75);
+  background:
+    rgba(0,0,0,0.75);
 
   backdrop-filter: blur(10px);
 }
 
-.modal.active,
-.login-modal.active,
-.upload-modal.active {
+.login-modal.show,
+#loginModal.show {
   display: flex;
 }
 
-.modal-box {
-  width: min(460px, 100%);
+.login-box {
+  width: min(430px, 100%);
 
   padding: 30px;
 
-  border: 1px solid var(--border);
-  border-radius: 22px;
+  border:
+    1px solid var(--border);
+
+  border-radius: 24px;
 
   background:
-    linear-gradient(
-      145deg,
-      #15192d,
-      #080a16
-    );
+    #101426;
 
   box-shadow:
-    0 30px 100px rgba(0,0,0,0.6);
+    0 30px 100px
+    rgba(0,0,0,0.6);
 }
 
-.modal-box input {
+.login-box input {
   width: 100%;
 
-  min-height: 48px;
+  height: 48px;
 
-  margin-top: 12px;
-  padding: 12px 15px;
+  margin:
+    8px 0;
 
-  border: 1px solid var(--border);
+  padding:
+    0 14px;
+
+  border:
+    1px solid var(--border);
+
   border-radius: 12px;
 
   outline: none;
 
   color: white;
-  background: rgba(255,255,255,0.05);
+
+  background:
+    rgba(255,255,255,0.05);
 }
 
-/* =========================
+
+/* =========================================================
    FOOTER
-   ========================= */
+   ========================================================= */
 
 footer {
-  width: 100%;
+  margin-top: 30px;
 
-  padding: 30px 20px;
+  padding:
+    35px 20px;
 
-  border-top: 1px solid var(--border);
+  border-top:
+    1px solid var(--border);
 
   color: var(--muted);
 
   text-align: center;
-
-  background: rgba(0,0,0,0.2);
-
-  font-size: 14px;
 }
+
 
 /* =========================================================
    TABLET
@@ -1154,176 +1314,188 @@ footer {
 
 @media (max-width: 1000px) {
 
+  .topbar {
+    padding:
+      10px 20px;
+  }
+
   .hero {
     grid-template-columns: 1fr;
 
     min-height: auto;
 
-    padding-top: 70px;
-
-    text-align: center;
+    padding-top: 65px;
   }
 
   .heroText {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    text-align: center;
+  }
+
+  .hero .sub {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .actions,
+  .stats {
+    justify-content: center;
   }
 
   .visual {
-    min-height: 480px;
+    height: 500px;
   }
 
   .grid {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
   }
-
-  .favorite-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-  .heading {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  #search {
-    width: 100%;
-  }
 }
 
+
 /* =========================================================
-   MOBILE
+   MOBILE NAVIGATION
    ========================================================= */
 
-@media (max-width: 700px) {
+@media (max-width: 760px) {
 
   .topbar {
-    min-height: 68px;
+    min-height: 70px;
 
-    padding: 9px 14px;
-
-    gap: 8px;
+    padding:
+      9px 14px;
   }
 
   .logo {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
 
     border-radius: 15px;
-
-    font-size: 17px;
   }
 
-  .brand {
-    gap: 9px;
+  .brand b {
+    font-size: 16px;
+  }
 
-    font-size: 15px;
+  #menuBtn,
+  .menu {
+    display: grid;
+
+    place-items: center;
   }
 
   .topbar nav {
-    gap: 13px;
+    position: absolute;
+
+    top: 70px;
+    left: 12px;
+    right: 12px;
+
+    display: none;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 0;
+
+    padding: 10px;
+
+    border:
+      1px solid var(--border);
+
+    border-radius: 18px;
+
+    background:
+      rgba(8,10,22,0.97);
+
+    box-shadow:
+      var(--shadow);
+  }
+
+  .topbar nav.open {
+    display: flex;
   }
 
   .topbar nav a {
-    font-size: 13px;
+    padding: 14px;
+
+    border-radius: 10px;
   }
 
-  .login-btn,
-  .topbar .login,
-  button.login {
-    min-height: 38px;
+  .topbar nav a:hover {
+    background:
+      rgba(255,255,255,0.06);
+  }
 
-    padding: 7px 11px;
+  .topbar nav a::after {
+    display: none;
+  }
 
-    font-size: 13px;
+  #loginBtn,
+  .login-btn {
+    display: none;
+  }
+
+  .section {
+    width: min(
+      100% - 28px,
+      700px
+    );
+
+    padding:
+      65px 0;
   }
 
   .hero {
-    width: 92%;
+    width: min(
+      100% - 28px,
+      700px
+    );
 
     padding:
-      55px 0
-      25px;
-
-    gap: 25px;
+      55px 0 50px;
   }
 
   .hero h1 {
-    font-size: clamp(36px, 10vw, 52px);
+    font-size:
+      clamp(38px, 11vw, 58px);
 
-    letter-spacing: -2px;
+    letter-spacing: -1.5px;
   }
 
-  .sub {
-    font-size: 15px;
-  }
-
-  .actions {
-    width: 100%;
-
-    justify-content: center;
-  }
-
-  .btn {
-    min-height: 48px;
-
-    padding: 11px 17px;
-
-    font-size: 14px;
+  .hero .sub {
+    font-size: 16px;
   }
 
   .stats {
-    width: 100%;
-
-    justify-content: center;
-
     gap: 25px;
-
-    margin-top: 30px;
   }
-
-  .stats b {
-    font-size: 20px;
-  }
-
-  .stats small {
-    font-size: 11px;
-  }
-
-  /* FIX 3D AREA */
 
   .visual {
-    width: 100%;
+    height: 410px;
 
-    min-height: 390px;
-
-    margin-top: 5px;
+    margin-top: 10px;
   }
 
   .poster {
-    width: 185px;
-    height: 275px;
-
-    border-radius: 20px;
+    width: 190px;
+    height: 300px;
   }
 
   .poster.back {
     transform:
-      translateX(-70px)
-      translateY(12px)
+      translateX(-65px)
       rotateY(20deg)
-      rotateZ(-6deg);
+      rotateZ(-7deg)
+      scale(0.82);
   }
 
   .poster.mid {
     transform:
-      translateX(70px)
-      translateY(12px)
+      translateX(55px)
       rotateY(-20deg)
-      rotateZ(6deg);
+      rotateZ(6deg)
+      scale(0.84);
   }
 
   .poster.front {
@@ -1331,169 +1503,98 @@ footer {
       translateZ(40px);
   }
 
-  .poster.front strong {
-    font-size: 21px;
+  .heading {
+    align-items: stretch;
+
+    flex-direction: column;
   }
 
-  /* SECTIONS */
-
-  .section {
-    width: 92%;
-
-    padding:
-      50px 0;
+  #search,
+  #movieSearch,
+  #searchInput {
+    width: 100%;
   }
 
-  .section h2 {
-    font-size: 34px;
+  .next {
+    flex-direction: column;
 
-    margin-bottom: 20px;
+    align-items: flex-start;
+
+    padding: 30px;
   }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 560px) {
 
   .eyebrow {
-    margin-bottom: 10px;
-
     font-size: 11px;
 
     letter-spacing: 4px;
   }
 
-  /* MOVIES */
-
-  .grid {
-    grid-template-columns: 1fr;
-
-    gap: 16px;
-  }
-
-  .card {
-    padding: 12px;
-  }
-
-  .cover {
-    height: 300px;
-  }
-
-  /* FAVORITES */
-
-  #library,
-  .library,
-  .favorites {
-    min-height: 0 !important;
-
-    padding-top: 35px !important;
-    padding-bottom: 35px !important;
-  }
-
-  .favorite-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* PLAYER */
-
-  #player {
-    padding-top: 45px;
-    padding-bottom: 45px;
-  }
-
-  .player {
-    width: 100%;
-
-    margin-top: 10px;
-
-    border-radius: 15px;
-  }
-
-  .player video {
-    width: 100%;
-
-    min-height: 220px;
-
-    aspect-ratio: 16 / 9;
-  }
-
-  /* PHASE 2 */
-
-  .next {
-    min-height: auto;
-
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    padding: 30px 24px;
-
-    border-radius: 22px;
-  }
-
-  .next h2 {
-    font-size: 30px;
-  }
-
-  .next p {
-    font-size: 14px;
-
-    line-height: 1.6;
-  }
-
-  .next .btn {
-    width: 100%;
-  }
-
-  /* UPLOAD */
-
-  .upload-box {
-    padding: 25px 18px;
-  }
-
-  footer {
-    padding: 25px 15px;
-  }
-}
-
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 480px) {
-
-  .topbar {
-    padding: 8px 10px;
-  }
-
-  .brand b {
-    font-size: 14px;
-  }
-
-  .topbar nav {
-    gap: 9px;
-  }
-
-  .topbar nav a {
-    font-size: 11px;
-  }
-
-  .login-btn,
-  .topbar .login,
-  button.login {
-    padding: 6px 9px;
-
-    font-size: 12px;
-  }
-
-  .hero {
-    padding-top: 45px;
+  h2 {
+    font-size: 34px;
   }
 
   .hero h1 {
-    font-size: 37px;
-
-    letter-spacing: -1.5px;
-  }
-
-  .sub {
-    font-size: 14px;
+    font-size: 39px;
   }
 
   .actions {
-    flex-direction: colum
+    flex-direction: column;
+
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .stats {
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+    gap: 10px;
+  }
+
+  .stats b {
+    font-size: 18px;
+  }
+
+  .stats small {
+    font-size: 11px;
+  }
+
+  /* IMPORTANT:
+     Keeps poster completely inside hero */
+  .visual {
+    height: 330px;
+
+    margin-top: 0;
+  }
+
+  .poster {
+    width: 150px;
+    height: 240px;
+
+    padding: 18px;
+
+    border-radius: 20px;
+  }
+
+  .poster strong {
+    font-size: 20px;
+  }
+
+  .poster.back {
+    transform:
+      translateX(-55px)
+      rotateY(18deg)
+      rot
