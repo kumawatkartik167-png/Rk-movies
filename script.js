@@ -1,103 +1,143 @@
-/* =========================================
-   RK MOVIES - PHASE 2
-   Main JavaScript
-========================================= */
+/* =========================================================
+   RK MOVIES — PHASE 2
+   Corrected Responsive JavaScript
+   Search • Filter • Favorites • Video Player • Upload Preview
+   ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =========================
-     MOBILE MENU
-  ========================= */
+  /* =========================================================
+     HELPERS
+     ========================================================= */
 
-  const menuBtn = document.getElementById("menuBtn");
-  const nav = document.querySelector(".topbar nav");
+  const $ = (selector, parent = document) =>
+    parent.querySelector(selector);
+
+  const $$ = (selector, parent = document) =>
+    Array.from(parent.querySelectorAll(selector));
+
+  const safeText = (value) =>
+    String(value || "").toLowerCase().trim();
+
+
+  /* =========================================================
+     MOBILE MENU
+     ========================================================= */
+
+  const menuBtn = $("#menuBtn");
+  const nav = $(".topbar nav");
 
   if (menuBtn && nav) {
     menuBtn.addEventListener("click", () => {
-      nav.classList.toggle("mobile-open");
+      nav.classList.toggle("open");
+
+      const isOpen = nav.classList.contains("open");
+
+      menuBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      menuBtn.textContent = isOpen ? "✕" : "☰";
     });
 
-    nav.querySelectorAll("a").forEach(link => {
+    $$("#topbar nav a, .topbar nav a").forEach(link => {
       link.addEventListener("click", () => {
-        nav.classList.remove("mobile-open");
+        nav.classList.remove("open");
+        menuBtn.textContent = "☰";
+        menuBtn.setAttribute("aria-expanded", "false");
       });
     });
   }
 
 
-  /* =========================
-     MOVIE SEARCH
-  ========================= */
+  /* =========================================================
+     SEARCH + MOVIE FILTER
+     ========================================================= */
 
-  const searchInput = document.getElementById("search");
-  const cards = Array.from(document.querySelectorAll(".card"));
-  const chips = Array.from(document.querySelectorAll(".chip"));
-  const emptyMessage = document.getElementById("empty");
+  const searchInput =
+    $("#search") ||
+    $("#movieSearch") ||
+    $("#searchInput");
 
-  let activeFilter = "all";
+  const filterButtons = $$(".chip, .filter-btn");
+
+  const movieCards = $$(".card, .movie-card, [data-movie]");
+
+  let currentFilter = "all";
+
+  function getCardTitle(card) {
+    return safeText(
+      card.dataset.title ||
+      $(".card-title, .movie-title, h3, h2", card)?.textContent ||
+      ""
+    );
+  }
+
+  function getCardCategory(card) {
+    return safeText(
+      card.dataset.cat ||
+      card.dataset.category ||
+      ""
+    );
+  }
 
   function filterMovies() {
 
-    const searchText = searchInput
-      ? searchInput.value.toLowerCase().trim()
+    const query = searchInput
+      ? safeText(searchInput.value)
       : "";
 
-    let visibleMovies = 0;
+    let visibleCount = 0;
 
-    cards.forEach(card => {
+    movieCards.forEach(card => {
 
-      const title =
-        (card.dataset.title || card.textContent)
-        .toLowerCase();
+      const title = getCardTitle(card);
+      const category = getCardCategory(card);
 
-      const category =
-        (card.dataset.cat || "all")
-        .toLowerCase();
+      const matchesSearch =
+        !query || title.includes(query);
 
-      const filterMatch =
-        activeFilter === "all" ||
-        category === activeFilter;
+      const matchesCategory =
+        currentFilter === "all" ||
+        category === currentFilter;
 
-      const searchMatch =
-        title.includes(searchText);
+      const show =
+        matchesSearch && matchesCategory;
 
-      if (filterMatch && searchMatch) {
-        card.style.display = "";
-        visibleMovies++;
-      } else {
-        card.style.display = "none";
+      card.style.display = show ? "" : "none";
+
+      if (show) {
+        visibleCount++;
       }
-
     });
+
+    const emptyMessage =
+      $("#empty") ||
+      $("#noResults");
 
     if (emptyMessage) {
       emptyMessage.style.display =
-        visibleMovies === 0 ? "block" : "none";
+        visibleCount === 0 ? "block" : "none";
     }
   }
-
 
   if (searchInput) {
     searchInput.addEventListener("input", filterMovies);
   }
 
+  filterButtons.forEach(button => {
 
-  /* =========================
-     MOVIE CATEGORY FILTER
-  ========================= */
+    button.addEventListener("click", () => {
 
-  chips.forEach(chip => {
+      filterButtons.forEach(btn =>
+        btn.classList.remove("active")
+      );
 
-    chip.addEventListener("click", () => {
+      button.classList.add("active");
 
-      chips.forEach(item => {
-        item.classList.remove("active");
-      });
-
-      chip.classList.add("active");
-
-      activeFilter =
-        (chip.dataset.filter || "all").toLowerCase();
+      currentFilter =
+        safeText(
+          button.dataset.filter ||
+          button.dataset.category ||
+          "all"
+        );
 
       filterMovies();
     });
@@ -105,26 +145,452 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  /* =========================
-     WATCH BUTTONS
-  ========================= */
+  /* =========================================================
+     VIDEO PLAYER
+     ========================================================= */
 
-  const watchButtons =
-    document.querySelectorAll(".watch");
+  const videoPlayer =
+    $("#videoPlayer") ||
+    $("video");
 
-  const playerSection =
-    document.getElementById("player");
+  const playerMessage =
+    $("#playerMessage") ||
+    $(".player-message");
 
-  watchButtons.forEach(button => {
+  function showPlayerMessage(message) {
+    if (playerMessage) {
+      playerMessage.textContent = message;
+    }
+  }
 
-    button.addEventListener("click", () => {
+  function playMovie(card) {
+
+    if (!videoPlayer) {
+      return;
+    }
+
+    const videoURL =
+      card.dataset.video ||
+      card.dataset.src ||
+      card.dataset.videoUrl ||
+      $("source", card)?.getAttribute("src");
+
+    const title =
+      card.dataset.title ||
+      $(".card-title, .movie-title, h3", card)?.textContent ||
+      "Movie";
+
+    if (!videoURL) {
+      showPlayerMessage(
+        `${title} का video अभी उपलब्ध नहीं है।`
+      );
+
+      const playerSection =
+        $("#player") ||
+        $(".player-section");
 
       if (playerSection) {
-
         playerSection.scrollIntoView({
           behavior: "smooth",
           block: "start"
         });
+      }
+
+      return;
+    }
+
+    videoPlayer.pause();
+
+    videoPlayer.src = videoURL;
+    videoPlayer.load();
+
+    const playerSection =
+      $("#player") ||
+      $(".player-section");
+
+    if (playerSection) {
+      playerSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    showPlayerMessage(`Now playing: ${title}`);
+
+    videoPlayer.play().catch(() => {
+      // Browser may block automatic playback.
+      // User can press Play manually.
+    });
+  }
+
+
+  /* =========================================================
+     WATCH BUTTONS
+     ========================================================= */
+
+  const watchButtons = $$(
+    ".watch, .watch-btn, [data-action='watch']"
+  );
+
+  watchButtons.forEach(button => {
+
+    button.addEventListener("click", event => {
+
+      event.preventDefault();
+
+      const card =
+        button.closest(
+          ".card, .movie-card, [data-movie]"
+        );
+
+      if (card) {
+        playMovie(card);
+      }
+
+    });
+
+  });
+
+
+  /* =========================================================
+     FAVORITES
+     ========================================================= */
+
+  const FAVORITES_KEY = "rkMoviesFavorites";
+
+  function getFavorites() {
+    try {
+      return JSON.parse(
+        localStorage.getItem(FAVORITES_KEY) || "[]"
+      );
+    } catch {
+      return [];
+    }
+  }
+
+  function saveFavorites(favorites) {
+    localStorage.setItem(
+      FAVORITES_KEY,
+      JSON.stringify(favorites)
+    );
+  }
+
+  function getMovieId(card) {
+
+    return (
+      card.dataset.id ||
+      card.dataset.title ||
+      $(".card-title, .movie-title, h3", card)?.textContent ||
+      `movie-${movieCards.indexOf(card)}`
+    ).trim();
+  }
+
+  function updateFavoriteButton(button, active) {
+
+    button.classList.toggle("active", active);
+
+    button.setAttribute(
+      "aria-pressed",
+      active ? "true" : "false"
+    );
+
+    if (button.dataset.label === "true") {
+      button.textContent =
+        active ? "♥ Saved" : "♡ Favorite";
+    } else {
+      button.textContent =
+        active ? "♥" : "♡";
+    }
+  }
+
+  function refreshFavoriteButtons() {
+
+    const favorites = getFavorites();
+
+    $$(".favorite, .fav-btn, [data-favorite]").forEach(button => {
+
+      const card =
+        button.closest(
+          ".card, .movie-card, [data-movie]"
+        );
+
+      if (!card) return;
+
+      const id = getMovieId(card);
+
+      updateFavoriteButton(
+        button,
+        favorites.includes(id)
+      );
+    });
+  }
+
+  $$(".favorite, .fav-btn, [data-favorite]")
+    .forEach(button => {
+
+      button.addEventListener("click", event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const card =
+          button.closest(
+            ".card, .movie-card, [data-movie]"
+          );
+
+        if (!card) return;
+
+        const id = getMovieId(card);
+
+        let favorites = getFavorites();
+
+        if (favorites.includes(id)) {
+
+          favorites =
+            favorites.filter(item => item !== id);
+
+          updateFavoriteButton(button, false);
+
+        } else {
+
+          favorites.push(id);
+
+          updateFavoriteButton(button, true);
+        }
+
+        saveFavorites(favorites);
+      });
+
+    });
+
+  refreshFavoriteButtons();
+
+
+  /* =========================================================
+     MY LIBRARY BUTTON
+     ========================================================= */
+
+  const libraryLinks = $$(
+    "a[href='#library'], a[href='#favorites'], #libraryBtn"
+  );
+
+  libraryLinks.forEach(link => {
+
+    link.addEventListener("click", event => {
+
+      const target =
+        $("#library") ||
+        $("#favorites");
+
+      if (target) {
+        event.preventDefault();
+
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    });
+
+  });
+
+
+  /* =========================================================
+     UPLOAD UI — FRONTEND PREVIEW
+     ========================================================= */
+
+  const uploadInput =
+    $("#videoUpload") ||
+    $("#videoInput") ||
+    $("#uploadVideo") ||
+    $("input[type='file']");
+
+  const uploadButton =
+    $("#uploadBtn") ||
+    $("#uploadButton");
+
+  const uploadPreview =
+    $("#uploadPreview") ||
+    $("#videoPreview");
+
+  const uploadName =
+    $("#uploadName") ||
+    $("#fileName");
+
+  const uploadSize =
+    $("#uploadSize") ||
+    $("#fileSize");
+
+  function formatFileSize(bytes) {
+
+    if (!bytes) return "0 KB";
+
+    const units = [
+      "Bytes",
+      "KB",
+      "MB",
+      "GB"
+    ];
+
+    const index =
+      Math.floor(
+        Math.log(bytes) / Math.log(1024)
+      );
+
+    return (
+      (bytes / Math.pow(1024, index)).toFixed(2) +
+      " " +
+      units[index]
+    );
+  }
+
+  function previewUpload(file) {
+
+    if (!file) return;
+
+    if (!file.type.startsWith("video/")) {
+
+      alert("कृपया केवल video file चुनें।");
+
+      if (uploadInput) {
+        uploadInput.value = "";
+      }
+
+      return;
+    }
+
+    if (uploadName) {
+      uploadName.textContent =
+        file.name;
+    }
+
+    if (uploadSize) {
+      uploadSize.textContent =
+        formatFileSize(file.size);
+    }
+
+    if (uploadPreview) {
+
+      const oldURL =
+        uploadPreview.dataset.objectUrl;
+
+      if (oldURL) {
+        URL.revokeObjectURL(oldURL);
+      }
+
+      const url =
+        URL.createObjectURL(file);
+
+      uploadPreview.dataset.objectUrl = url;
+
+      if (uploadPreview.tagName === "VIDEO") {
+
+        uploadPreview.src = url;
+        uploadPreview.load();
+
+      } else {
+
+        uploadPreview.innerHTML = "";
+
+        const video =
+          document.createElement("video");
+
+        video.controls = true;
+        video.playsInline = true;
+        video.preload = "metadata";
+        video.src = url;
+
+        uploadPreview.appendChild(video);
+      }
+
+      uploadPreview.style.display = "block";
+    }
+  }
+
+  if (uploadInput) {
+
+    uploadInput.addEventListener(
+      "change",
+      () => {
+
+        const file =
+          uploadInput.files?.[0];
+
+        previewUpload(file);
+      }
+    );
+  }
+
+  if (uploadButton && uploadInput) {
+
+    uploadButton.addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+
+        uploadInput.click();
+      }
+    );
+  }
+
+
+  /* =========================================================
+     UPLOAD BUTTONS WITHOUT INPUT
+     ========================================================= */
+
+  $$(".upload-trigger, [data-upload]").forEach(button => {
+
+    button.addEventListener("click", event => {
+
+      event.preventDefault();
+
+      if (uploadInput) {
+        uploadInput.click();
+      } else {
+        alert(
+          "Upload input अभी HTML में उपलब्ध नहीं है।"
+        );
+      }
+
+    });
+
+  });
+
+
+  /* =========================================================
+     LOGIN UI
+     ========================================================= */
+
+  const loginButtons = $$(
+    "#loginBtn, .login-btn, [data-login]"
+  );
+
+  loginButtons.forEach(button => {
+
+    button.addEventListener("click", event => {
+
+      event.preventDefault();
+
+      const loginBox =
+        $("#loginModal") ||
+        $(".login-modal");
+
+      if (loginBox) {
+
+        loginBox.classList.add("show");
+
+        loginBox.setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+      } else {
+
+        alert(
+          "Login system Phase 2 frontend में तैयार है।\n" +
+          "Real user accounts के लिए backend/database चाहिए।"
+        );
 
       }
 
@@ -133,163 +599,131 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  /* =========================
-     VIDEO PLAYER
-  ========================= */
+  /* =========================================================
+     CLOSE LOGIN MODAL
+     ========================================================= */
 
-  const video =
-    document.querySelector(".player video");
+  $$(".modal-close, [data-close-login]").forEach(button => {
 
-  if (video) {
+    button.addEventListener("click", () => {
 
-    video.addEventListener("play", () => {
-      console.log("RK Movies video started");
-    });
+      const loginBox =
+        $("#loginModal") ||
+        $(".login-modal");
 
-    video.addEventListener("pause", () => {
-      console.log("RK Movies video paused");
-    });
+      if (loginBox) {
 
-    video.addEventListener("ended", () => {
-      console.log("RK Movies video ended");
-    });
+        loginBox.classList.remove("show");
 
-  }
-
-
-  /* =========================
-     VIDEO DOUBLE TAP / DOUBLE CLICK
-     Skip 10 seconds
-  ========================= */
-
-  if (video) {
-
-    let lastTap = 0;
-
-    video.addEventListener("click", event => {
-
-      const currentTime =
-        new Date().getTime();
-
-      const tapLength =
-        currentTime - lastTap;
-
-      if (tapLength < 350 && tapLength > 0) {
-
-        const rect =
-          video.getBoundingClientRect();
-
-        const clickX =
-          event.clientX - rect.left;
-
-        if (clickX < rect.width / 2) {
-
-          video.currentTime =
-            Math.max(0, video.currentTime - 10);
-
-        } else {
-
-          video.currentTime =
-            Math.min(
-              video.duration || Infinity,
-              video.currentTime + 10
-            );
-
-        }
-
+        loginBox.setAttribute(
+          "aria-hidden",
+          "true"
+        );
       }
-
-      lastTap = currentTime;
 
     });
 
-  }
+  });
 
 
-  /* =========================
-     UPLOAD UI
-  ========================= */
+  /* =========================================================
+     EXPLORE MOVIES
+     ========================================================= */
 
-  const uploadInput =
-    document.getElementById("movieUpload");
+  $$(
+    "a[href='#movies'], [data-scroll='movies']"
+  ).forEach(button => {
 
-  const uploadButton =
-    document.getElementById("uploadBtn");
+    button.addEventListener("click", event => {
 
-  const progressBar =
-    document.querySelector(".progress span");
+      const movies =
+        $("#movies") ||
+        $(".movies-section");
 
-  const uploadStatus =
-    document.getElementById("uploadStatus");
+      if (movies) {
 
-  if (uploadButton && uploadInput) {
+        event.preventDefault();
 
-    uploadButton.addEventListener("click", () => {
-
-      if (!uploadInput.files.length) {
-
-        if (uploadStatus) {
-          uploadStatus.textContent =
-            "Please select a video first.";
-        }
-
-        return;
+        movies.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
       }
 
-      const file =
-        uploadInput.files[0];
+    });
 
-      const allowedTypes = [
-        "video/mp4",
-        "video/webm",
-        "video/ogg",
-        "video/quicktime"
-      ];
+  });
 
-      if (!allowedTypes.includes(file.type)) {
 
-        if (uploadStatus) {
-          uploadStatus.textContent =
-            "Please select a supported video file.";
-        }
+  /* =========================================================
+     UPLOAD HERO BUTTON
+     ========================================================= */
 
-        return;
+  $$(
+    "a[href='#upload'], [data-scroll='upload']"
+  ).forEach(button => {
+
+    button.addEventListener("click", event => {
+
+      const uploadSection =
+        $("#upload") ||
+        $(".upload-section");
+
+      if (uploadSection) {
+
+        event.preventDefault();
+
+        uploadSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
       }
 
-      if (uploadStatus) {
-        uploadStatus.textContent =
-          "Video selected: " + file.name;
+    });
+
+  });
+
+
+  /* =========================================================
+     KEYBOARD SUPPORT
+     ========================================================= */
+
+  document.addEventListener("keydown", event => {
+
+    if (event.key === "Escape") {
+
+      if (nav) {
+        nav.classList.remove("open");
       }
 
-      /*
-        Phase 2 frontend demo only.
-
-        Real upload requires:
-        - Backend
-        - Cloud storage
-        - Database
-        - Authentication
-        - Upload API
-      */
-
-      let progress = 0;
-
-      if (progressBar) {
-        progressBar.style.width = "0%";
+      if (menuBtn) {
+        menuBtn.textContent = "☰";
+        menuBtn.setAttribute(
+          "aria-expanded",
+          "false"
+        );
       }
 
-      const timer =
-        setInterval(() => {
+      const loginBox =
+        $("#loginModal") ||
+        $(".login-modal");
 
-          progress += 10;
+      if (loginBox) {
+        loginBox.classList.remove("show");
+      }
+    }
 
-          if (progressBar) {
-            progressBar.style.width =
-              progress + "%";
-          }
+  });
 
-          if (progress >= 100) {
 
-            clearInterval(timer);
+  /* =========================================================
+     INITIAL FILTER
+     ========================================================= */
 
-            if (
+  filterMovies();
+
+  console.log(
+    "RK Movies Phase 2 JavaScript loaded successfully."
+  );
+
+});
